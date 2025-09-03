@@ -35,9 +35,27 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Optional<TaskDTO> getTaskById(Long id) {
         System.out.println("Executing Service: getTaskById for ID: " + id);
+
+        // 模拟一个异常 if(true) throw new NullPointerException();
+
         return tasks.stream()
                 .filter(task -> task.getId().equals(id))
                 .findFirst();
+    }
+
+    /**
+     * 简化版本
+     */
+    @Override
+    public TaskDTO getTaskByIdSimplified(Long id) {
+        System.out.println("Executing Service: getTaskById for ID: " + id);
+
+        for (TaskDTO task : tasks) {
+            if (task.getId().equals(id)) {
+                return task;
+            }
+        }
+        return null;
     }
 
     @Override

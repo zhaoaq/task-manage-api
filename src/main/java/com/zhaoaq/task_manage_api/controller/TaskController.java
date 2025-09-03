@@ -1,6 +1,7 @@
 package com.zhaoaq.task_manage_api.controller;
 
 import com.zhaoaq.task_manage_api.dto.TaskDTO;
+import com.zhaoaq.task_manage_api.exception.ResourceNotFoundException;
 import com.zhaoaq.task_manage_api.service.TaskService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,23 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
-        return taskService.getTaskById(id)
-                .map(ResponseEntity::ok)// .map方法 “如果有值，就对它做某事”。
-                .orElseGet(() -> ResponseEntity.notFound().build()); // 如果没值，就做某事并返回结果
+
+        // 模拟参数校验
+        if (id < 0) {
+            throw new IllegalArgumentException("任务ID不能为负数: " + id);
+        }
+
+        // 调用Service获取结果
+        TaskDTO task = taskService.getTaskByIdSimplified(id);
+
+        // 使用传统的if-else判断来处理Optional
+        if (task != null) {
+            // 如果找到了任务，获取任务对象并返回
+            return ResponseEntity.ok(task);
+        } else {
+            // 如果没有找到任务，抛出自定义异常
+            throw new ResourceNotFoundException("ID为 " + id + " 的任务未找到");
+        }
     }
 
     @GetMapping("/search")

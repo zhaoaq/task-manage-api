@@ -27,6 +27,11 @@ public interface TaskService {
     Optional<TaskDTO> getTaskById(Long id);
 
     /**
+     * 简化版本
+     */
+    public TaskDTO getTaskByIdSimplified(Long id);
+
+    /**
      * 创建一个新任务
      * @param TaskDto 要创建的任务对象 (不含ID)
      * @return 创建成功并带有新ID的任务对象
